@@ -1,5 +1,11 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);
+@import url(https://fonts.googleapis.com/css2?family=Comfortaa&display=swap);
 @charset "UTF-8";
+:root {
+  --app-color-grey: #dee2e6;
+  --app-color-grey-light: #badbcc;
+}
+
 /*!
  * Bootstrap v5.1.3 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors
@@ -11285,4 +11291,8 @@ textarea.form-control-lg {
   .d-print-none {
     display: none !important;
   }
+}
+body {
+  font-family: "Comfortaa", cursive !important;
+  color: #555555;
 }

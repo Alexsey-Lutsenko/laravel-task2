@@ -6,10 +6,15 @@
 
 require("./bootstrap");
 import { createApp } from "vue";
-// import router from "./router/router";
-import vuex from "vuex";
+import router from "./router";
+import store from "./store";
 import App from "./views/App";
+import components from "./components/ui";
 
 const app = createApp(App);
 
-app.use(vuex).mount("#app");
+components.forEach((component) => {
+    app.component(component.name, component);
+});
+
+app.use(router).use(store).mount("#app");
