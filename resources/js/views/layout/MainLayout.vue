@@ -21,7 +21,7 @@
         </nav>
     </div>
 
-    <div class="w-100 d-inline-flex justify-content-center mt-5">
+    <div class="w-100">
         <router-view></router-view>
     </div>
 </template>
