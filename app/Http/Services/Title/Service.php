@@ -13,6 +13,10 @@ class Service
 
     public function update($title, $validated)
     {
+        if(($title->clients->count() > 0 || $title->images->count() > 0) && ($title->title !== $validated['title'])) {
+            return 2;
+        }
+
         $title->update($validated);
 
         return $title;

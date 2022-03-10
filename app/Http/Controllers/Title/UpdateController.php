@@ -14,6 +14,12 @@ class UpdateController extends BaseController
 
         $data = $this->service->update($title, $validated);
 
-        return new TitleResource($data);
+        if ($data === 2) {
+            return response(['data'=>['message' => "Запись $data связана с другой таблицей, изменить тему невозможно", 'error' => true]], 200);
+        } else if ($data === 1) {
+            return response(['data'=>['message' => "$data не удалось удалить", 'error' => true]], 200);
+        } else {
+            return response(['data'=>['error' => false]], 200);
+        }
     }
 }

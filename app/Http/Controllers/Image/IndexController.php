@@ -10,8 +10,8 @@ class IndexController extends Controller
 {
     public function __invoke()
     {
-        $image = Image::latest()->first();
+        $image = Image::latest()->paginate(5);
 
-        return new ImageResource($image);
+        return ImageResource::collection($image);
     }
 }

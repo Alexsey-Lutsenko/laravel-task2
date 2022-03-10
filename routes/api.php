@@ -43,6 +43,6 @@ Route::group(['namespace' => 'Client', 'prefix' => 'clients'], function () {
 Route::group(['namespace' => 'Image', 'prefix' => 'images'], function () {
     Route::get('/', 'IndexController');
     Route::post('/', 'StoreController');
-//    Route::patch('/{image}', 'UpdateController');
-//    Route::delete('/{image}', 'DestroyController');
+    Route::patch('/{image}', 'UpdateController');
+    Route::delete('/{image}', 'DestroyController');
 });

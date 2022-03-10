@@ -26,8 +26,8 @@ class StoreRequest extends FormRequest
         return [
             'images' => 'required|array',
             'description' => '',
-            'title_id' => '',
-            'title' => '',
+            'title_id' => 'exists:titles,id',
+            'title' => 'required_without:title_id|max:255|string'
         ];
     }
 }

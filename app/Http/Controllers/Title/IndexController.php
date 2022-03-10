@@ -10,7 +10,7 @@ class IndexController extends Controller
 {
     public function __invoke()
     {
-        $data = Title::all();
+        $data = Title::latest()->get();
 
         return TitleResource::collection($data);
     }

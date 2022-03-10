@@ -13,11 +13,11 @@ class DestroyController extends BaseController
         $isDelete = $this->service->destroy($title);
 
         if ($isDelete === 2) {
-            return response(['message' => "Запись $data связана с другой таблицей, удалить невозможно"], 500);
+            return response(['data'=>['message' => "Запись $data связана с другой таблицей, удалить невозможно", 'error' => true]], 200);
         } else if ($isDelete === 1) {
-            return response(['message' => "$data не удалось удалить"], 500);
+            return response(['data'=>['message' => "$data не удалось удалить", 'error' => true]], 200);
         } else {
-            return response(['message' => "$data успешно удалено"], 200);
+            return response(['data'=>['message' => "$data успешно удалено", 'error' => false]], 200);
         }
     }
 }

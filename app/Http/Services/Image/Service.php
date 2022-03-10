@@ -11,7 +11,6 @@ class Service
 {
     public function store($validated)
     {
-
         $title = Title::firstOrCreate(['title' => $validated['title']]);
 
         $images = $validated['images'];
@@ -36,7 +35,29 @@ class Service
 
     public function update($image, $validated)
     {
-        $image->update($validated);
+        $img = $validated['images'][0] ?? null;
+        $title = Title::firstOrCreate(['title' => $validated['title']]);
+
+        if($img) {
+            $currentImg = $image->path;
+            Storage::disk('public')->delete($currentImg);
+
+            $name = md5(Carbon::now() . '_' . $img->getClientOriginalName()) . '.' . $img->getClientOriginalExtension();
+
+            $path = Storage::disk('public')->putFileAs('/images', $img, $name);
+            $size = $img->getSize();
+
+            $image->update([
+                'path' => $path,
+                'url' => url('/storage/' . $path),
+                'size' => $size
+            ]);
+        }
+
+        $image->update([
+            'description' => $validated['description'] ?? "",
+            'title_id' => $title->id
+        ]);
 
         return $image;
     }

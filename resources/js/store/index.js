@@ -1,5 +1,8 @@
 import Vuex from "vuex";
 import login from "./modules/login.module";
+import image from "./modules/image.module";
+import client from "./modules/client.module";
+import title from "./modules/title.module";
 
 export default new Vuex.Store({
     state() {
@@ -30,5 +33,5 @@ export default new Vuex.Store({
             state.message = payload;
         },
     },
-    modules: { login },
+    modules: { login, image, client, title },
 });

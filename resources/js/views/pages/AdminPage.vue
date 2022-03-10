@@ -1,75 +1,52 @@
 <template>
-    <div class="d-flex align-items-center justify-content-center">
-        <h1>AdminPage</h1>
+    <div class="container mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="d-flex justify-content-center menu-position">
+                <ul class="navbar-nav title-layout">
+                    <li :class="[{ active: component == 'client' }, 'nav-item']" @click="getComponent('client')">Клиенты</li>
+                    <li :class="[{ active: component == 'title' }, 'nav-item mx-3']" @click="getComponent('title')">Темы</li>
+                    <li :class="[{ active: component == 'image' }, 'nav-item']" @click="getComponent('image')">Фото</li>
+                </ul>
+            </div>
+        </nav>
     </div>
-    <div class="w-25">
-        <input v-model="title" type="text" class="form-control" placeholder="title" />
-        <input v-model="description" type="text" class="form-control" placeholder="description" />
-        <button class="btn btn-dark" @click="send">Upload</button>
-
-        <div class="mt-3 d-flex justify-content-center">
-            <div ref="dropzoneEl" class="btn d-block p-5 bg-dark text-center text-light">Upload</div>
-        </div>
-    </div>
-    <div v-if="image">
-        <h4>{{ image.title }}</h4>
-        <div>
-            <img :src="image.url" />
-        </div>
-    </div>
+    <component :is="component + '-admin-component'" />
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
-import Dropzone from "dropzone";
+import { ref } from "vue";
+import ClientAdminComponent from "../../components/adminComponent/ClientAdminComponent.vue";
+import ImageAdminComponent from "../../components/adminComponent/ImageAdminComponent.vue";
+import TitleAdminComponent from "../../components/adminComponent/TitleAdminComponent.vue";
 
 export default {
     setup() {
-        const dropzone = ref(null);
-        const dropzoneEl = ref(null);
-        const title = ref("");
-        const description = ref("");
-        const image = ref(null);
-
-        const getImage = () => {
-            axios.get("api/images").then((res) => (image.value = res.data.data));
-        };
-
-        onMounted(() => {
-            dropzone.value = new Dropzone(dropzoneEl.value, {
-                autoProcessQueue: false,
-                url: "/api/images/",
-                addRemoveLinks: true,
-            });
-
-            getImage();
-        });
+        const component = localStorage.getItem("component") ? ref(localStorage.getItem("component")) : ref("image");
 
         return {
-            title,
-            dropzone,
-            dropzoneEl,
-            description,
-            image,
-            send: async () => {
-                const data = new FormData();
-                const files = dropzone.value.getAcceptedFiles();
-                files.forEach((file) => {
-                    data.append("images[]", file);
-                    dropzone.value.removeFile(file);
-                });
-                data.append("title", title.value);
-                title.value = "";
-                data.append("description", description.value);
-                description.value = "";
-
-                await axios.post("/api/images", data).then((res) => {
-                    getImage();
-                });
+            component,
+            getComponent: (name) => {
+                component.value = name;
+                localStorage.setItem("component", component.value);
             },
         };
+    },
+    components: {
+        ClientAdminComponent,
+        ImageAdminComponent,
+        TitleAdminComponent,
     },
 };
 </script>
 
-<style></style>
+<style scoped>
+.menu-position {
+    width: 100%;
+}
+.active {
+    color: rgba(0, 0, 0, 0.9);
+}
+.nav-item {
+    cursor: pointer;
+}
+</style>

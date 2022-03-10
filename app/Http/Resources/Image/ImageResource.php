@@ -22,6 +22,7 @@ class ImageResource extends JsonResource
             'description' => $this->description,
             'title_id' => $this->title_id,
             'title' => $this->title->title,
+            'name' => str_replace('images/', '', $this->path)
         ];
     }
 }

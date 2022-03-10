@@ -1,5 +1,5 @@
 <template>
-    <div class="container my-3">
+    <div class="container mt-3 mb-1">
         <nav class="navbar navbar-expand-lg navbar-light border-bottom">
             <div class="d-flex logo">
                 <i id="icon-camera" class="fa-solid fa-camera-retro"></i>
