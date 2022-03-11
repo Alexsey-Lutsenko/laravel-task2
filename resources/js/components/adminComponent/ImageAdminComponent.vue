@@ -174,7 +174,7 @@ export default {
                 }
             },
             getResults: (page = 1) => {
-                store.dispatch("image/index", page);
+                store.dispatch("image/index", { page: page });
             },
             destroy: async (id) => await store.dispatch("image/destroy", id),
             showImage: (url) => {

@@ -23198,7 +23198,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }(),
       getResults: function getResults() {
         var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-        store.dispatch("image/index", page);
+        store.dispatch("image/index", {
+          page: page
+        });
       },
       destroy: function () {
         var _destroy = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(id) {
