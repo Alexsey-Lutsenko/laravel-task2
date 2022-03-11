@@ -113,7 +113,10 @@ export default {
             destroy: async (id) => {
                 await store.dispatch("title/destroy", id);
             },
-            cancel: () => (titleModel.value = {}),
+            cancel: () => {
+                titleModel.value = {};
+                typeFunction.value == 1;
+            },
         };
     },
 };

@@ -22,7 +22,7 @@
                 <small class="text-danger error-text" v-if="errors.mail">{{ errors.mail }}</small>
             </div>
             <div class="input-block">
-                <app-input v-model.trim="clientModel.title" type="text" placeholder="Тема"></app-input>
+                <v-select :options="titleArr" v-model="clientModel.title" placeholder="Тема" taggable></v-select>
                 <small class="text-danger error-text" v-if="errors.title">{{ errors.title }}</small>
             </div>
         </div>
@@ -68,14 +68,17 @@
 <script>
 import { onMounted, computed, ref, watch } from "vue";
 import { useStore } from "vuex";
+import vSelect from "vue-select";
 
 export default {
     setup() {
         const store = useStore();
         const clientModel = ref({});
         const typeFunction = ref(1);
+        const titleArr = ref([]);
 
         const clients = computed(() => store.getters["client/getClients"]);
+        const titles = computed(() => store.getters["title/getTitles"]);
         const errors = computed(() => store.getters["client/getErrors"]);
         const errorCount = computed(() => store.getters["client/getErrorCount"]);
         const loader = computed(() => store.getters["getLoader"]);
@@ -83,6 +86,11 @@ export default {
 
         onMounted(async () => {
             await store.dispatch("client/index");
+            await store.dispatch("title/index");
+
+            titles.value.forEach((title) => {
+                titleArr.value.push(title.title);
+            });
         });
 
         const create = async () => {
@@ -108,6 +116,8 @@ export default {
             clientModel,
             errors,
             update,
+            titles,
+            titleArr,
             send: async () => {
                 if (typeFunction.value == 1) {
                     await create();
@@ -122,8 +132,14 @@ export default {
             destroy: async (id) => {
                 await store.dispatch("client/destroy", id);
             },
-            cancel: () => (clientModel.value = {}),
+            cancel: () => {
+                clientModel.value = {};
+                typeFunction.value = 1;
+            },
         };
+    },
+    components: {
+        vSelect,
     },
 };
 </script>

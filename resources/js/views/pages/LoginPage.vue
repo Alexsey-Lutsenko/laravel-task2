@@ -61,7 +61,7 @@ export default {
             login: async () => {
                 await store.dispatch("login/login", { email: email.value, password: password.value });
                 if (login.value) {
-                    router.push("/admin");
+                    router.push("/");
                 }
             },
         };

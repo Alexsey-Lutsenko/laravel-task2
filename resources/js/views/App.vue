@@ -72,7 +72,28 @@ export default {
 .dz-error-message {
     color: red !important;
 }
+.dz-filename {
+    max-width: 265px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 img {
     cursor: pointer;
+}
+.v-select {
+    width: 200px;
+}
+.vs__dropdown-toggle {
+    border: none;
+    border-bottom: 1px solid var(--app-color-grey);
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    padding: 0 0 4px;
+}
+.vs__search,
+.vs__search:focus {
+    color: #000;
+    font-size: 15px;
+    margin-top: 8px;
 }
 </style>
