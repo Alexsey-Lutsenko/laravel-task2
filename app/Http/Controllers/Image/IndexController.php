@@ -3,15 +3,21 @@
 namespace App\Http\Controllers\Image;
 
 use App\Http\Controllers\Controller;
+use App\Http\Filters\ImageFilter;
+use App\Http\Requests\Image\FilterRequest;
 use App\Http\Resources\Image\ImageResource;
 use App\Models\Image;
 
 class IndexController extends Controller
 {
-    public function __invoke()
+    public function __invoke(FilterRequest $request)
     {
-        $image = Image::latest()->paginate(5);
+        $data = $request->validated();
 
-        return ImageResource::collection($image);
+        $filter = app()->make(ImageFilter::class, ['queryParams' => array_filter($data)]);
+
+        $images = Image::filter($filter)->latest()->paginate(5);
+
+        return ImageResource::collection($images);
     }
 }

@@ -72,4 +72,7 @@ export default {
 .dz-error-message {
     color: red !important;
 }
+img {
+    cursor: pointer;
+}
 </style>

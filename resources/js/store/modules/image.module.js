@@ -48,10 +48,10 @@ export default {
         },
     },
     actions: {
-        async index({ commit }, page = 1) {
+        async index({ commit }, payload = { page: 1 }) {
             try {
                 store.commit("addLoader", { root: true });
-                const { data } = await axios.get("api/images?page=" + page);
+                const { data } = await axios.get("api/images", { params: payload });
                 commit("addImages", data);
                 commit("remuveError");
             } catch (e) {

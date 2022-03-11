@@ -27,7 +27,10 @@
             </div>
         </div>
         <div class="d-flex justify-content-center mx-2">
-            <app-button-success class="button-style" @click.prevent="send"><i class="fa-solid fa-check"></i></app-button-success>
+            <app-button-success class="button-style" @click.prevent="send"></app-button-success>
+        </div>
+        <div class="d-flex justify-content-center">
+            <app-button-cancel class="button-style" @click.prevent="cancel"></app-button-cancel>
         </div>
     </div>
 
@@ -90,6 +93,7 @@ export default {
         };
 
         const update = async (id) => {
+            window.scrollTo(0, 0);
             clients.value.forEach((element) => {
                 if (element.id == id) {
                     clientModel.value = Object.assign({}, element);
@@ -118,6 +122,7 @@ export default {
             destroy: async (id) => {
                 await store.dispatch("client/destroy", id);
             },
+            cancel: () => (clientModel.value = {}),
         };
     },
 };

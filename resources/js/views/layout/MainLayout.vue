@@ -8,7 +8,7 @@
             <div class="d-flex justify-content-center menu-position">
                 <ul class="navbar-nav title-layout">
                     <li class="nav-item">
-                        <router-link class="nav-link py-0" :to="'/'">Главная</router-link>
+                        <router-link class="nav-link py-0" :to="'/'">Галерея</router-link>
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link py-0" :to="'/admin'">Админ</router-link>

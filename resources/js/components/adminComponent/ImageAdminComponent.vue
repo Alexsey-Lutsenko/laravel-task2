@@ -18,7 +18,10 @@
             </div>
         </div>
         <div class="d-flex justify-content-center mx-2">
-            <app-button-success class="button-style" @click.prevent="send"><i class="fa-solid fa-check"></i></app-button-success>
+            <app-button-success class="button-style" @click.prevent="send"></app-button-success>
+        </div>
+        <div class="d-flex justify-content-center">
+            <app-button-cancel class="button-style" @click.prevent="cancel"></app-button-cancel>
         </div>
     </div>
 
@@ -34,7 +37,7 @@
             </thead>
             <tbody>
                 <tr v-for="image of images.data" :key="image.id">
-                    <td><img :src="image.url" width="255" height="189" /></td>
+                    <td><img :src="image.url" width="255" height="189" @click="showImage(image.url)" /></td>
                     <td>{{ image.description }}</td>
                     <td>{{ image.title }}</td>
                     <td>
@@ -50,6 +53,10 @@
     <div class="d-flex w-100 justify-content-center">
         <laravel-vue-pagination :data="images" @pagination-change-page="getResults"></laravel-vue-pagination>
     </div>
+
+    <Teleport to="body">
+        <app-image-show :image="urlImage" @close="urlImage = null"></app-image-show>
+    </Teleport>
 </template>
 
 <script>
@@ -65,6 +72,7 @@ export default {
         const dropzoneEl = ref(null);
         const imageModel = ref({ title: "", description: "", id: null });
         const typeFunction = ref(1);
+        const urlImage = ref(null);
 
         const images = computed(() => store.getters["image/getImages"]);
         const loader = computed(() => store.getters["getLoader"]);
@@ -92,6 +100,7 @@ export default {
         };
 
         const update = (id) => {
+            window.scrollTo(0, 0);
             prewDrop();
             typeFunction.value = 2;
 
@@ -114,6 +123,7 @@ export default {
             errors,
             errorCount,
             update,
+            urlImage,
             typeFunction,
             send: async () => {
                 if (typeFunction.value == 1) {
@@ -150,6 +160,13 @@ export default {
                 store.dispatch("image/index", page);
             },
             destroy: async (id) => await store.dispatch("image/destroy", id),
+            showImage: (url) => {
+                urlImage.value = url;
+            },
+            cancel: () => {
+                imageModel.value = {};
+                prewDrop();
+            },
         };
     },
     components: { LaravelVuePagination },

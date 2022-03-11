@@ -1,5 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
-import MainPage from "../views/pages/MainPage";
+import GalleryPage from "../views/pages/GalleryPage";
 import AdminPage from "../views/pages/AdminPage";
 import LoginPage from "../views/pages/LoginPage";
 import NotFound from "../views/pages/NotFound";
@@ -7,8 +7,8 @@ import NotFound from "../views/pages/NotFound";
 const routes = [
     {
         path: "/",
-        name: MainPage,
-        component: MainPage,
+        name: GalleryPage,
+        component: GalleryPage,
         meta: {
             layout: "main",
             auth: true,
