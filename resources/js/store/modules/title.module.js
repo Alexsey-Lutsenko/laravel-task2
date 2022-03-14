@@ -7,6 +7,7 @@ export default {
     state() {
         return {
             titles: [],
+            title: {},
             errors: [],
             errorCount: 0,
             message: "",
@@ -15,6 +16,9 @@ export default {
     getters: {
         getTitles(state) {
             return state.titles;
+        },
+        getTitle(state) {
+            return state.title;
         },
         getErrors(state) {
             return state.errors;
@@ -29,6 +33,9 @@ export default {
     mutations: {
         addTitles(state, payload) {
             state.titles = payload;
+        },
+        addTitle(state, payload) {
+            state.title = payload;
         },
         addMessage(state, payload) {
             state.message = payload;

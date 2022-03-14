@@ -18,6 +18,10 @@ class IndexController extends Controller
 
         $images = Image::filter($filter)->latest()->paginate(5);
 
+        if(isset($data['random'])) {
+            $images = Image::filter($filter)->inRandomOrder()->limit($data['random'])->get();
+        }
+
         return ImageResource::collection($images);
     }
 }

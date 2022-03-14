@@ -24,7 +24,8 @@ class FilterRequest extends FormRequest
     public function rules()
     {
         return [
-            'title_id' => 'exists:titles,id'
+            'title_id' => 'exists:titles,id',
+            'random' => 'numeric'
         ];
     }
 }

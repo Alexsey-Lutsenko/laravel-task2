@@ -17,6 +17,6 @@ class ImageFilter extends AbstractFilter
 
     public function title_id(Builder $builder, $value)
     {
-        $builder->where('title_id', '=', $value);
+        $builder->where('title_id', '=', $value)->latest()->paginate(5);
     }
 }

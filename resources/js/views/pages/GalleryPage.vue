@@ -8,7 +8,10 @@
     </div>
 
     <div v-if="!loader">
-        <div class="d-flex justify-content-center mt-3" v-if="titleDescription">
+        <div class="d-flex justify-content-center mt-3">
+            <router-link :to="'/'"><i class="fa-solid fa-angle-left"></i> Вернуться на главную</router-link>
+        </div>
+        <div class="d-flex justify-content-center mt-1" v-if="titleDescription">
             <h6>Описание темы: {{ titleDescription }}</h6>
         </div>
 
@@ -18,7 +21,7 @@
             </ul>
             <ul class="nav-menu top-nav-menu">
                 <li v-for="title of titles" :key="title.id" @click.prevent="getFilter(title.id)" :class="{ active: titleId == title.id }">
-                    <span v-if="title.cnt_images > 0">{{ title.title }}</span>
+                    <span>{{ title.title }}</span>
                 </li>
             </ul>
         </div>
@@ -28,6 +31,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Фото</th>
+                        <th scope="col">Размер</th>
                         <th scope="col">Описание</th>
                         <th scope="col">Тема</th>
                     </tr>
@@ -35,6 +39,7 @@
                 <tbody>
                     <tr v-for="image of images.data" :key="image.id">
                         <td><img :src="image.url" width="255" height="189" @click="showImage(image.url)" /></td>
+                        <td>{{ image.size }}</td>
                         <td>{{ image.description }}</td>
                         <td>{{ image.title }}</td>
                     </tr>
@@ -59,17 +64,18 @@ import LaravelVuePagination from "laravel-vue-pagination";
 export default {
     setup() {
         const store = useStore();
-        const titleId = ref(null);
         const titleDescription = ref(null);
         const urlImage = ref(null);
+        const titleId = ref(store.getters["title/getTitle"].id) ?? ref(null);
 
         const images = computed(() => store.getters["image/getImages"]);
-        const titles = computed(() => store.getters["title/getTitles"]);
+        const titles = computed(() => store.getters["title/getTitles"].filter((title) => title.cnt_images > 0));
         const loader = computed(() => store.getters["getLoader"]);
         watch(loader, () => {});
 
         onMounted(async () => {
-            await store.dispatch("image/index");
+            titleId.value ? await store.dispatch("image/index", { title_id: titleId.value }) : await store.dispatch("image/index");
+            titleDescription.value = titleId.value ? titles.value.find((title) => title.id == titleId.value).description : null;
             await store.dispatch("title/index");
         });
 
