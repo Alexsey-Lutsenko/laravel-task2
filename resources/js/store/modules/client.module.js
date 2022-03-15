@@ -9,11 +9,15 @@ export default {
             clients: [],
             errors: [],
             errorCount: 0,
+            captchaPatch: "",
         };
     },
     getters: {
         getClients(state) {
             return state.clients;
+        },
+        getCaptchaPatch(state) {
+            return state.captchaPatch;
         },
         getErrors(state) {
             return state.errors;
@@ -25,6 +29,9 @@ export default {
     mutations: {
         addClients(state, payload) {
             state.clients = payload;
+        },
+        addCaptchaPatch(state, payload) {
+            state.captchaPatch = payload;
         },
         addErrors(state, requests) {
             if (requests.errors) {
@@ -48,6 +55,22 @@ export default {
                 commit("addErrors", errorHandler(e));
             } finally {
                 store.commit("removeLoader", { root: true });
+            }
+        },
+
+        async reloadCaptcha({ commit }) {
+            try {
+                const { data } = await axios.get("api/clients/reload-captcha");
+                commit("addCaptchaPatch", data.data);
+            } catch (e) {}
+        },
+
+        async checkCaptcha({ commit }, payload) {
+            try {
+                await axios.post("/captcha-validation", payload);
+                commit("remuveError");
+            } catch (e) {
+                commit("addErrors", errorHandler(e));
             }
         },
 

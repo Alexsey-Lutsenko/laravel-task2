@@ -87,6 +87,7 @@ export default {
             titleDescription,
             urlImage,
             getFilter: (id) => {
+                store.commit("title/addTitle", {});
                 titleId.value = id;
                 if (id) {
                     titleDescription.value = titles.value.find((title) => title.id == id).description;

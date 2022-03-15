@@ -30,7 +30,7 @@ export default {
     font-size: 16px;
 }
 .menu-position {
-    width: 89%;
+    width: 65%;
 }
 #icon-camera {
     font-size: 20px;
@@ -95,5 +95,12 @@ img {
     color: #000;
     font-size: 15px;
     margin-top: 8px;
+}
+.vs__selected {
+    max-width: 135px;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
 }
 </style>

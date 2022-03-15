@@ -13,15 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('clients', function (Blueprint $table) {
-            $table->id();
-            $table->string('fio');
-            $table->string('phone_number');
-            $table->string('location');
-            $table->string('mail');
-            $table->timestamps();
-
-            $table->foreignId('title_id')->nullable()->index()->constrained('titles');
+        Schema::table('clients', function (Blueprint $table) {
+            $table->dateTime('date_time');
         });
     }
 
@@ -32,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clients');
+        Schema::table('clients', function (Blueprint $table) {
+            $table->dropColumn('date_time');
+        });
     }
 };

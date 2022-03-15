@@ -11,10 +11,14 @@ import store from "./store";
 import App from "./views/App";
 import components from "./components/ui";
 
+import Datepicker from "vue3-date-time-picker";
+
 const app = createApp(App);
 
 components.forEach((component) => {
     app.component(component.name, component);
 });
+
+app.component("Datepicker", Datepicker);
 
 app.use(router).use(store).mount("#app");

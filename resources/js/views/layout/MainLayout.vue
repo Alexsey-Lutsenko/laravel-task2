@@ -5,6 +5,9 @@
                 <i id="icon-camera" class="fa-solid fa-camera-retro"></i>
                 Photo
             </div>
+            <button class="btn btn-order-photo">
+                <router-link class="py-0 link-order-photo" :to="'/order-photo'">Сделать заказ</router-link>
+            </button>
             <div class="d-flex justify-content-center menu-position">
                 <ul class="navbar-nav title-layout">
                     <li class="nav-item">
@@ -41,4 +44,25 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+$red: #e1332d;
+
+.btn-order-photo {
+    width: 150px;
+    margin-left: 15px;
+    border: 1px solid #dee2e6;
+    transition: all 150ms linear;
+    &:hover {
+        background: darken(#dad8d8, 1.5%);
+        transition: all 250ms linear;
+    }
+    &:focus {
+        box-shadow: none;
+    }
+}
+
+.link-order-photo {
+    text-decoration: none;
+    color: #555555;
+}
+</style>

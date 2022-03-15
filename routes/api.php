@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,6 +34,7 @@ Route::group(['namespace' => 'Title', 'prefix' => 'titles'], function () {
 
 Route::group(['namespace' => 'Client', 'prefix' => 'clients'], function () {
     Route::get('/', 'IndexController');
+    Route::get('/reload-captcha', 'ReloadCaptchaController');
     Route::post('/', 'StoreController');
     Route::patch('/{client}', 'UpdateController');
     Route::delete('/{client}', 'DestroyController');
@@ -46,3 +46,4 @@ Route::group(['namespace' => 'Image', 'prefix' => 'images'], function () {
     Route::patch('/{image}', 'UpdateController');
     Route::delete('/{image}', 'DestroyController');
 });
+

@@ -9,7 +9,7 @@ class Service
 {
     public function store($validated)
     {
-        if($validated['title']) {
+        if(isset($validated['title'])) {
             $title = Title::firstOrCreate(['title' => $validated['title']]);
             unset($validated['title']);
             $validated['title_id'] = $title->id;
@@ -20,11 +20,12 @@ class Service
 
     public function update($client, $validated)
     {
-        if($validated['title']) {
+        if(isset($validated['title'])) {
             $title = Title::firstOrCreate(['title' => $validated['title']]);
-            unset($validated['title']);
             $validated['title_id'] = $title->id;
         }
+
+        unset($validated['title']);
 
         $client->update($validated);
 

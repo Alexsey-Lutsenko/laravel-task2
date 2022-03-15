@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import GalleryPage from "../views/pages/GalleryPage";
 import MainPage from "../views/pages/MainPage";
+import OrderPhotoPage from "../views/pages/OrderPhotoPage";
 import TitlePage from "../views/pages/TitlePage";
 import AdminPage from "../views/pages/AdminPage";
 import LoginPage from "../views/pages/LoginPage";
@@ -12,6 +13,16 @@ const routes = [
         path: "/",
         name: MainPage,
         component: MainPage,
+        meta: {
+            layout: "main",
+            auth: true,
+            admin: false,
+        },
+    },
+    {
+        path: "/order-photo",
+        name: OrderPhotoPage,
+        component: OrderPhotoPage,
         meta: {
             layout: "main",
             auth: true,

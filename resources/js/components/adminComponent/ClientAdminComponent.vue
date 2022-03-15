@@ -14,22 +14,36 @@
                 <small class="text-danger error-text" v-if="errors.phone_number">{{ errors.phone_number }}</small>
             </div>
             <div class="input-block">
+                <datepicker
+                    v-model="clientModel.date_time"
+                    placeholder="Дата и время"
+                    :format="format"
+                    :previewFormat="format"
+                    locale="ru"
+                    selectText="Ок"
+                    cancelText="Отмена"
+                    @closed="formatInp(clientModel.date_time)"
+                >
+                </datepicker>
+                <small class="text-danger error-text" v-if="errors.date_time">{{ errors.date_time }}</small>
+            </div>
+            <div class="input-block mx-2">
                 <app-input v-model.trim="clientModel.location" type="text" placeholder="Локация"></app-input>
                 <small class="text-danger error-text" v-if="errors.location">{{ errors.location }}</small>
             </div>
-            <div class="input-block mx-2">
+            <div class="input-block">
                 <app-input v-model.trim="clientModel.mail" type="text" placeholder="Почта"></app-input>
                 <small class="text-danger error-text" v-if="errors.mail">{{ errors.mail }}</small>
             </div>
-            <div class="input-block">
+            <div class="input-block mx-2">
                 <v-select :options="titleArr" v-model="clientModel.title" placeholder="Тема" taggable></v-select>
                 <small class="text-danger error-text" v-if="errors.title">{{ errors.title }}</small>
             </div>
         </div>
-        <div class="d-flex justify-content-center mx-2">
+        <div class="d-flex justify-content-center">
             <app-button-success class="button-style" @click.prevent="send"></app-button-success>
         </div>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center mx-2">
             <app-button-cancel class="button-style" @click.prevent="cancel"></app-button-cancel>
         </div>
     </div>
@@ -41,6 +55,7 @@
                 <tr>
                     <th scope="col">ФИО</th>
                     <th scope="col">Телефон</th>
+                    <th scope="col">Дата и время</th>
                     <th scope="col">Локация</th>
                     <th scope="col">Почта</th>
                     <th scope="col">Тема</th>
@@ -50,6 +65,7 @@
                 <tr v-for="client of clients" :key="client.id">
                     <td>{{ client.fio }}</td>
                     <td>{{ client.phone_number }}</td>
+                    <td>{{ format(client.date_time) }}</td>
                     <td>{{ client.location }}</td>
                     <td>{{ client.mail }}</td>
                     <td>{{ client.title }}</td>
@@ -69,6 +85,7 @@
 import { onMounted, computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import vSelect from "vue-select";
+import dateFormat, { masks } from "dateformat";
 
 export default {
     setup() {
@@ -76,6 +93,14 @@ export default {
         const clientModel = ref({});
         const typeFunction = ref(1);
         const titleArr = ref([]);
+
+        const format = (date) => {
+            return dateFormat(date, "dd.mm.yyyy HH:MM");
+        };
+
+        const formatInp = (date) => {
+            clientModel.value.date_time = dateFormat(date, "yyyy-mm-dd HH:MM");
+        };
 
         const clients = computed(() => store.getters["client/getClients"]);
         const titles = computed(() => store.getters["title/getTitles"]);
@@ -102,9 +127,10 @@ export default {
 
         const update = async (id) => {
             window.scrollTo(0, 0);
-            clients.value.forEach((element) => {
-                if (element.id == id) {
-                    clientModel.value = Object.assign({}, element);
+            clients.value.forEach((client) => {
+                if (client.id == id) {
+                    clientModel.value = Object.assign({}, client);
+                    clientModel.value.title_id = null;
                 }
             });
             typeFunction.value = 2;
@@ -118,6 +144,8 @@ export default {
             update,
             titles,
             titleArr,
+            format,
+            formatInp,
             send: async () => {
                 if (typeFunction.value == 1) {
                     await create();

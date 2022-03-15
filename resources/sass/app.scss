@@ -9,6 +9,35 @@
 @import "~bootstrap/scss/bootstrap";
 @import "~vue-select/dist/vue-select.css";
 
+// Datepicker
+@import "vue3-date-time-picker/src/Vue3DatePicker/style/main.scss";
+.dp__input {
+    font-family: "Comfortaa", cursive !important;
+    font-size: 15px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--app-color-grey);
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    padding-bottom: 5px;
+}
+.dp__menu_index {
+    font-family: "Comfortaa", cursive !important;
+    font-size: 15px;
+    color: #555555;
+}
+.dp__input_icon {
+    padding-top: 2px;
+}
+.dp__today {
+    border-color: #555555;
+}
+.dp__active_date,
+.dp__overlay_cell_active {
+    background: #dad8d8;
+    color: #555555;
+}
+
 body {
     font-family: "Comfortaa", cursive !important;
     color: #555555;

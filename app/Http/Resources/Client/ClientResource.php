@@ -20,8 +20,9 @@ class ClientResource extends JsonResource
             'phone_number' => $this->phone_number,
             'location' => $this->location,
             'mail' => $this->mail,
-            'title_id' => $this->title_id,
-            'title' => $this->title->title,
+            'title_id' => $this->title_id ?? null,
+            'title' => $this->title->title ?? null,
+            'date_time' => $this->date_time
         ];
     }
 }

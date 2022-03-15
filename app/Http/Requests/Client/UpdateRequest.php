@@ -28,8 +28,9 @@ class UpdateRequest extends FormRequest
             'phone_number' => 'required|max:255',
             'location' => 'required|max:255|string',
             'mail' => 'required|max:255|string',
-            'title_id' => 'exists:titles,id',
-            'title' => 'required_without:title_id|max:255|string'
+            'title' => 'nullable|max:255|string',
+            'title_id' => 'nullable|exists:titles,id',
+            'date_time' => 'required|date'
         ];
     }
 }
