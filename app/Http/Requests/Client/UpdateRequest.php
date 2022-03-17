@@ -24,13 +24,14 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'fio' => 'required|max:255|string',
-            'phone_number' => 'required|max:255',
-            'location' => 'required|max:255|string',
-            'mail' => 'required|max:255|string',
-            'title' => 'nullable|max:255|string',
-            'title_id' => 'nullable|exists:titles,id',
-            'date_time' => 'required|date'
+            'fio' => 'filled|max:255|string',
+            'phone_number' => 'filled|max:255',
+            'location' => 'filled|max:255|string',
+            'mail' => 'filled|max:255|string',
+            'title' => 'filled|nullable|max:255|string',
+            'title_id' => 'filled|nullable|exists:titles,id',
+            'date_time' => 'filled|date',
+            'status_id' => 'filled|exists:statuses,id',
         ];
     }
 }

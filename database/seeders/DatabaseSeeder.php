@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Status;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Role;
@@ -21,6 +22,11 @@ class DatabaseSeeder extends Seeder
         Role::insert([
             ['role' => 'admin'],
             ['role' => 'user']
+        ]);
+
+        Status::insert([
+            ['status' => 'В процессе'],
+            ['status' => 'Завершено']
         ]);
     }
 }

@@ -116,13 +116,12 @@ export default {
                 await store.dispatch("client/checkCaptcha", { captcha: clientModel.value.captcha });
                 await captcha_reload();
 
-                if (errorCount.value == 0) {
+                if (!errors.value.captcha) {
                     delete clientModel.value.captcha;
                     await store.dispatch("client/store", clientModel.value);
 
                     if (errorCount.value == 0) {
                         clientModel.value = {};
-                        await captcha_reload();
                     }
                 }
                 loader.value = false;

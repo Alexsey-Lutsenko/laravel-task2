@@ -47,3 +47,7 @@ Route::group(['namespace' => 'Image', 'prefix' => 'images'], function () {
     Route::delete('/{image}', 'DestroyController');
 });
 
+Route::group(['namespace' => 'Status', 'prefix' => 'statuses'], function () {
+    Route::get('/', 'IndexController');
+});
+

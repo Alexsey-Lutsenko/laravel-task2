@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Client;
 
+use App\Models\Client;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -13,10 +14,19 @@ class StoreRequest extends FormRequest
      * @return bool
      */
     protected $phone_number = null;
+    protected $status_id = null;
 
     protected function prepareForValidation()
     {
+
+
         $input = $this->all();
+        $client = Client::where('fio', 'like', $input['fio'])->where('phone_number', '=', $input['phone_number'])->where('status_id', '=', 1)->first();
+
+        if (isset($client->status_id)) {
+            $status_id = $client->status_id;
+            $this->status_id = $status_id;
+        };
 
         if (isset($input['phone_number'])) {
             $phone_number = intval($input['phone_number']);
@@ -41,11 +51,13 @@ class StoreRequest extends FormRequest
     {
         $fio_phone_number_uniq = Rule::unique('clients')
             ->where(function ($query) {
-                if ($this->phone_number !== null) {
+            if($this->status_id) {
+                if ($this->phone_number !== null && $this->status_id !== 2) {
                     $query->where([
                         ['phone_number', $this->phone_number],
                     ]);
-                } else {
+                }
+            } else {
                     $query->whereNull('phone_number');
                 }
             });
@@ -63,6 +75,13 @@ class StoreRequest extends FormRequest
             'title_id' => 'filled|nullable|exists:titles,id',
             'title' => 'filled|max:255|string',
             'date_time' => 'required|date'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'fio.unique' => 'Ваша предыдущая заявка еще в процессе'
         ];
     }
 }

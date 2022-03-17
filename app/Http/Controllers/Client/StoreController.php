@@ -11,8 +11,8 @@ class StoreController extends BaseController
     {
         $validated = $request->validated();
 
-        $data = $this->service->store($validated);
+        $this->service->store($validated);
 
-        return new ClientResource($data);
+        return response(['status' => 'created'], 200);
     }
 }

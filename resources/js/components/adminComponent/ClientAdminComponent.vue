@@ -59,6 +59,7 @@
                     <th scope="col">Локация</th>
                     <th scope="col">Почта</th>
                     <th scope="col">Тема</th>
+                    <th scope="col">Статус</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,6 +70,19 @@
                     <td>{{ client.location }}</td>
                     <td>{{ client.mail }}</td>
                     <td>{{ client.title }}</td>
+                    <td>
+                        <select :class="[client.status_id == 2 ? 'status-select-ready' : 'status-select-process', 'p-0 form-select']">
+                            <option
+                                v-for="status of statuses"
+                                :key="status.id"
+                                :value="status.id"
+                                :selected="client.status_id == status.id"
+                                @click="editStatus(client, status.id)"
+                            >
+                                {{ status.status }}
+                            </option>
+                        </select>
+                    </td>
                     <td>
                         <i class="fa-solid fa-user-pen add-icon-style" @click.prevent="update(client.id)"></i>
                     </td>
@@ -104,6 +118,7 @@ export default {
 
         const clients = computed(() => store.getters["client/getClients"]);
         const titles = computed(() => store.getters["title/getTitles"]);
+        const statuses = computed(() => store.getters["status/getStatuses"]);
         const errors = computed(() => store.getters["client/getErrors"]);
         const errorCount = computed(() => store.getters["client/getErrorCount"]);
         const loader = computed(() => store.getters["getLoader"]);
@@ -112,11 +127,19 @@ export default {
         onMounted(async () => {
             await store.dispatch("client/index");
             await store.dispatch("title/index");
+            await store.dispatch("status/index");
 
             titles.value.forEach((title) => {
                 titleArr.value.push(title.title);
             });
         });
+
+        const editStatus = async (client, status_id) => {
+            console.log(client.status_id, status_id);
+            if (client.status_id !== status_id) {
+                await store.dispatch("client/update", { id: client.id, status_id: status_id });
+            }
+        };
 
         const create = async () => {
             await store.dispatch("client/store", clientModel.value);
@@ -125,7 +148,7 @@ export default {
             }
         };
 
-        const update = async (id) => {
+        const update = (id) => {
             window.scrollTo(0, 0);
             clients.value.forEach((client) => {
                 if (client.id == id) {
@@ -143,9 +166,11 @@ export default {
             errors,
             update,
             titles,
+            statuses,
             titleArr,
             format,
             formatInp,
+            editStatus,
             send: async () => {
                 if (typeFunction.value == 1) {
                     await create();
@@ -189,5 +214,23 @@ export default {
 }
 .button-style {
     height: min-content;
+}
+.form-select {
+    cursor: pointer;
+    text-align: center;
+}
+.status-select-ready {
+    border: 1px solid #69da69;
+    background: #9dd89d;
+    &:focus {
+        box-shadow: none;
+    }
+}
+.status-select-process {
+    border: 1px solid #698dda;
+    background: #9db9d8;
+    &:focus {
+        box-shadow: none;
+    }
 }
 </style>

@@ -62,12 +62,14 @@ export default {
             try {
                 const { data } = await axios.get("api/clients/reload-captcha");
                 commit("addCaptchaPatch", data.data);
-            } catch (e) {}
+            } catch (e) {
+                commit("addErrors", errorHandler(e));
+            }
         },
 
         async checkCaptcha({ commit }, payload) {
             try {
-                await axios.post("/captcha-validation", payload);
+                await axios.post("captcha-validation", payload);
                 commit("remuveError");
             } catch (e) {
                 commit("addErrors", errorHandler(e));

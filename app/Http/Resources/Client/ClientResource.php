@@ -22,7 +22,9 @@ class ClientResource extends JsonResource
             'mail' => $this->mail,
             'title_id' => $this->title_id ?? null,
             'title' => $this->title->title ?? null,
-            'date_time' => $this->date_time
+            'date_time' => $this->date_time,
+            'status_id' => $this->status->id,
+            'status' => $this->status->status
         ];
     }
 }

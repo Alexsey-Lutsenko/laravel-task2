@@ -14,4 +14,8 @@ class Client extends Model
     public function title() {
         return $this->belongsTo(Title::class, 'title_id', 'id');
     }
+
+    public function status() {
+        return $this->belongsTo(Status::class, 'status_id', 'id');
+    }
 }
