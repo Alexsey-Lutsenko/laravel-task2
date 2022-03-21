@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, watch } from "vue";
+import {ref, computed, onMounted, watch, onBeforeUnmount} from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -47,6 +47,8 @@ export default {
         onMounted(async () => {
             await store.dispatch("image/index", { title_id: title.value.id });
         });
+
+        onBeforeUnmount(() => store.commit('title/addTitle', {}))
 
         return {
             title,

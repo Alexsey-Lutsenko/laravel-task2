@@ -1,7 +1,7 @@
 <template>
     <div class="container mt-3 mb-1">
         <nav class="navbar navbar-expand-lg navbar-light border-bottom">
-            <div class="d-flex logo">
+            <div class="d-flex logo" @click="goMainPage">
                 <i id="icon-camera" class="fa-solid fa-camera-retro"></i>
                 Photo
             </div>
@@ -33,12 +33,20 @@
 </template>
 
 <script>
+import {useRouter} from "vue-router"
+
 export default {
     setup() {
+        const router = useRouter();
+
         return {
             logout: () => {
                 localStorage.removeItem("login");
             },
+            goMainPage: () => {
+                if(localStorage.getItem('login'))
+                router.push('/')
+            }
         };
     },
 };
