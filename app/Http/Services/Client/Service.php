@@ -27,6 +27,15 @@ class Service
 
         unset($validated['title']);
 
+        if(isset($validated['status_id']) && $validated['status_id'] == 3) {
+            $pendingClient = Client::orderBy('id', 'asc')
+                ->where('fio', 'like', $client->fio)
+                ->where('phone_number', 'like', $client->phone_number)
+                ->where('status_id', '=', 1)
+                ->first();
+            $pendingClient->update(['status_id' => 2]);
+        }
+
         $client->update($validated);
 
         return $client;

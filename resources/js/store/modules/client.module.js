@@ -34,6 +34,10 @@ export default {
             state.captchaPatch = payload;
         },
         addErrors(state, requests) {
+            if(requests.message) {
+                console.error('Error: ' + requests.message)
+            }
+
             if (requests.errors) {
                 state.errorCount = 1;
             }

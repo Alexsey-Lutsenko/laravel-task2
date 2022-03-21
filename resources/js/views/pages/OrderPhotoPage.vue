@@ -3,6 +3,10 @@
         <h1>Создание заявки</h1>
     </div>
 
+    <div class="d-flex justify-content-center m2-4" v-if="createMessage">
+        <h6 class="text-success">Ваша заявку успешно создана</h6>
+    </div>
+
     <div class="d-flex justify-content-center mt-4" v-if="loader">
         <app-loader class="my-5" v-if="loader"></app-loader>
     </div>
@@ -26,7 +30,6 @@
                     locale="ru"
                     selectText="Ок"
                     cancelText="Отмена"
-                    @closed="formatInp(clientModel.date_time)"
                 >
                 </datepicker>
                 <small class="text-danger error-text" v-if="errors.date_time">{{ errors.date_time }}</small>
@@ -78,13 +81,14 @@ export default {
         const clientModel = ref({});
         const loader = ref(false);
         const loader_captcha = ref(false);
+        const createMessage = ref(false);
 
         const format = (date) => {
             return dateFormat(date, "dd.mm.yyyy HH:MM");
         };
 
         const formatInp = (date) => {
-            clientModel.value.date_time = dateFormat(date, "yyyy-mm-dd HH:MM");
+            return dateFormat(date, "yyyy-mm-dd HH:MM");
         };
 
         const errors = computed(() => store.getters["client/getErrors"]);
@@ -108,19 +112,28 @@ export default {
             errors,
             errorCount,
             captchaPath,
+            createMessage,
             format,
             formatInp,
             captcha_reload,
             send: async () => {
                 loader.value = true;
                 await store.dispatch("client/checkCaptcha", { captcha: clientModel.value.captcha });
+                delete clientModel.value.captcha;
                 await captcha_reload();
 
                 if (!errors.value.captcha) {
-                    delete clientModel.value.captcha;
+                    if(clientModel.value.date_time) {
+                        clientModel.value.date_time = formatInp(clientModel.value.date_time)
+                    }
                     await store.dispatch("client/store", clientModel.value);
 
+
                     if (errorCount.value == 0) {
+                        createMessage.value = true
+                        setTimeout(() => {
+                            createMessage.value = false
+                        }, 2000)
                         clientModel.value = {};
                     }
                 }

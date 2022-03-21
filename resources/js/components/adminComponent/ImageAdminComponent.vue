@@ -10,11 +10,11 @@
             </div>
             <div class="input-block mx-2">
                 <app-input v-model.trim="imageModel.description" type="text" placeholder="Описание"></app-input>
-                <small class="text-danger error-text" v-if="errors.description">{{ errors.description }}</small>
+                <small class="text-danger error-text" v-if="errorCount > 0">{{ errors.description }}</small>
             </div>
             <div class="input-block">
                 <v-select :options="titleArr" v-model="imageModel.title" placeholder="Тема" taggable></v-select>
-                <small class="text-danger error-text" v-if="errors.title">{{ errors.title }}</small>
+                <small class="text-danger error-text" v-if="errorCount > 0">{{ errors.title }}</small>
             </div>
         </div>
         <div class="d-flex justify-content-center mx-2">
@@ -118,7 +118,7 @@ export default {
             typeFunction.value = 2;
 
             images.value.data.forEach((image) => {
-                if (image.id == id) {
+                if (image.id === id) {
                     imageModel.value = Object.assign({}, image);
 
                     let file = { id: image.id, name: image.name, size: image.size };
@@ -140,7 +140,7 @@ export default {
             typeFunction,
             titleArr,
             send: async () => {
-                if (typeFunction.value == 1) {
+                if (typeFunction.value === 1) {
                     const data = new FormData();
                     const files = dropzone.value.getAcceptedFiles();
                     files.forEach((file) => {
@@ -152,7 +152,7 @@ export default {
                     imageModel.value = {};
                     store.dispatch("image/store", data);
                     prewDrop();
-                } else if (typeFunction.value == 2) {
+                } else if (typeFunction.value === 2) {
                     const data = new FormData();
                     const files = dropzone.value.getAcceptedFiles();
                     files.forEach((file) => {

@@ -10,7 +10,7 @@ class IndexController extends Controller
 {
     public function __invoke()
     {
-        $data = Client::all();
+        $data = Client::orderBy('status_id', 'asc')->orderBy('id', 'desc')->get();
 
         return ClientResource::collection($data);
     }

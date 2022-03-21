@@ -18,10 +18,11 @@ class StoreRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-
-
         $input = $this->all();
-        $client = Client::where('fio', 'like', $input['fio'])->where('phone_number', '=', $input['phone_number'])->where('status_id', '=', 1)->first();
+
+        if(isset($input['fio']) && isset($input['phone_number'])) {
+            $client = Client::where('fio', 'like', $input['fio'])->where('phone_number', '=', $input['phone_number'])->where('status_id', '=', 1)->first();
+        }
 
         if (isset($client->status_id)) {
             $status_id = $client->status_id;
@@ -81,7 +82,7 @@ class StoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'fio.unique' => 'Ваша предыдущая заявка еще в процессе'
+            'fio.unique' => 'Предыдущая заявка еще не обработана'
         ];
     }
 }

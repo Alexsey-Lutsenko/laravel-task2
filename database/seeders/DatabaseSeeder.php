@@ -25,8 +25,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Status::insert([
+            ['status' => 'В ожидании'],
             ['status' => 'В процессе'],
-            ['status' => 'Завершено']
+            ['status' => 'Завершено'],
         ]);
     }
 }

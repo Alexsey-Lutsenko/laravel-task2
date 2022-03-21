@@ -35,13 +35,14 @@ export default {
             state.admin = request;
         },
         addErrors(state, requests) {
+            if(requests.message) {
+                console.error('Error: ' + requests.message)
+            }
+
             if (requests.errors) {
                 state.errorCount = 1;
             }
             state.errors = requests.errors;
-            if (requests.message) {
-                console.error("ERROR: ", requests.message);
-            }
         },
         remuveError(state) {
             state.errorCount = 0;

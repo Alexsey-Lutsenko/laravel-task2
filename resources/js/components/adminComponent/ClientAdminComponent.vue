@@ -7,11 +7,11 @@
         <div class="d-flex">
             <div class="input-block">
                 <app-input v-model.trim="clientModel.fio" type="text" placeholder="ФИО"></app-input>
-                <small class="text-danger error-text" v-if="errors.fio">{{ errors.fio }}</small>
+                <small class="text-danger error-text" v-if="errorCount > 0">{{ errors.fio }}</small>
             </div>
             <div class="input-block mx-2">
                 <app-input v-model.number="clientModel.phone_number" type="text" placeholder="Телефон"></app-input>
-                <small class="text-danger error-text" v-if="errors.phone_number">{{ errors.phone_number }}</small>
+                <small class="text-danger error-text" v-if="errorCount > 0">{{ errors.phone_number }}</small>
             </div>
             <div class="input-block">
                 <datepicker
@@ -20,24 +20,25 @@
                     :format="format"
                     :previewFormat="format"
                     locale="ru"
+                    textInput
+                    :textInputOptions="textInputOptions"
                     selectText="Ок"
                     cancelText="Отмена"
-                    @closed="formatInp(clientModel.date_time)"
                 >
                 </datepicker>
-                <small class="text-danger error-text" v-if="errors.date_time">{{ errors.date_time }}</small>
+                <small class="text-danger error-text" v-if="errorCount > 0">{{ errors.date_time }}</small>
             </div>
             <div class="input-block mx-2">
                 <app-input v-model.trim="clientModel.location" type="text" placeholder="Локация"></app-input>
-                <small class="text-danger error-text" v-if="errors.location">{{ errors.location }}</small>
+                <small class="text-danger error-text" v-if="errorCount > 0">{{ errors.location }}</small>
             </div>
             <div class="input-block">
                 <app-input v-model.trim="clientModel.mail" type="text" placeholder="Почта"></app-input>
-                <small class="text-danger error-text" v-if="errors.mail">{{ errors.mail }}</small>
+                <small class="text-danger error-text" v-if="errorCount > 0">{{ errors.mail }}</small>
             </div>
             <div class="input-block mx-2">
                 <v-select :options="titleArr" v-model="clientModel.title" placeholder="Тема" taggable></v-select>
-                <small class="text-danger error-text" v-if="errors.title">{{ errors.title }}</small>
+                <small class="text-danger error-text" v-if="errorCount > 0">{{ errors.title }}</small>
             </div>
         </div>
         <div class="d-flex justify-content-center">
@@ -71,12 +72,15 @@
                     <td>{{ client.mail }}</td>
                     <td>{{ client.title }}</td>
                     <td>
-                        <select :class="[client.status_id == 2 ? 'status-select-ready' : 'status-select-process', 'p-0 form-select']">
+                        <select :class="[client.status_id === 1 ? 'status-select-pending' :
+                                        client.status_id === 2 ? 'status-select-process' : 'status-select-ready', 'p-0 form-select']"
+                                :disabled="client.status_id === 3"
+                        >
                             <option
                                 v-for="status of statuses"
                                 :key="status.id"
                                 :value="status.id"
-                                :selected="client.status_id == status.id"
+                                :selected="client.status_id === status.id"
                                 @click="editStatus(client, status.id)"
                             >
                                 {{ status.status }}
@@ -84,7 +88,9 @@
                         </select>
                     </td>
                     <td>
-                        <i class="fa-solid fa-user-pen add-icon-style" @click.prevent="update(client.id)"></i>
+                        <button class="btn" :disabled="client.status_id === 3" @click.prevent="update(client.id)">
+                            <i class="fa-solid fa-user-pen add-icon-style"></i>
+                        </button>
                     </td>
                     <td>
                         <i class="fa-regular fa-circle-xmark add-icon-style" @click.prevent="destroy(client.id)"></i>
@@ -102,7 +108,7 @@ import vSelect from "vue-select";
 import dateFormat, { masks } from "dateformat";
 
 export default {
-    setup() {
+    setup(props, {emit}) {
         const store = useStore();
         const clientModel = ref({});
         const typeFunction = ref(1);
@@ -112,8 +118,12 @@ export default {
             return dateFormat(date, "dd.mm.yyyy HH:MM");
         };
 
+        const textInputOptions = ref({
+            format: 'dd.MM.yyyy HH:mm'
+        })
+
         const formatInp = (date) => {
-            clientModel.value.date_time = dateFormat(date, "yyyy-mm-dd HH:MM");
+            return dateFormat(date, "yyyy-mm-dd HH:MM");
         };
 
         const clients = computed(() => store.getters["client/getClients"]);
@@ -135,7 +145,6 @@ export default {
         });
 
         const editStatus = async (client, status_id) => {
-            console.log(client.status_id, status_id);
             if (client.status_id !== status_id) {
                 await store.dispatch("client/update", { id: client.id, status_id: status_id });
             }
@@ -153,7 +162,7 @@ export default {
             clients.value.forEach((client) => {
                 if (client.id == id) {
                     clientModel.value = Object.assign({}, client);
-                    clientModel.value.title_id = null;
+                    delete clientModel.value.title_id;
                 }
             });
             typeFunction.value = 2;
@@ -164,6 +173,7 @@ export default {
             loader,
             clientModel,
             errors,
+            errorCount,
             update,
             titles,
             statuses,
@@ -171,12 +181,18 @@ export default {
             format,
             formatInp,
             editStatus,
+            textInputOptions,
             send: async () => {
-                if (typeFunction.value == 1) {
+                if(clientModel.value.date_time) {
+                    clientModel.value.date_time = formatInp(clientModel.value.date_time)
+                }
+                if (typeFunction.value === 1) {
                     await create();
-                } else if (typeFunction.value == 2) {
+                } else if (typeFunction.value === 2) {
+                    console.log('update')
+                    console.log(clientModel.value)
                     await store.dispatch("client/update", clientModel.value);
-                    if (errorCount.value == 0) {
+                    if (errorCount.value === 0) {
                         clientModel.value = {};
                         typeFunction.value = 1;
                     }
@@ -188,7 +204,7 @@ export default {
             cancel: () => {
                 clientModel.value = {};
                 typeFunction.value = 1;
-            },
+            }
         };
     },
     components: {
@@ -220,13 +236,21 @@ export default {
     text-align: center;
 }
 .status-select-ready {
+
+    border: 1px solid #6a6e6e;
+    background: #beb8b8;
+    &:focus {
+        box-shadow: none;
+    }
+}
+.status-select-process {
     border: 1px solid #69da69;
     background: #9dd89d;
     &:focus {
         box-shadow: none;
     }
 }
-.status-select-process {
+.status-select-pending {
     border: 1px solid #698dda;
     background: #9db9d8;
     &:focus {
